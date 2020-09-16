@@ -26,3 +26,10 @@ Average_change = Changes/(len(data)-1)
 Average_change_format= "${:,.2f}".format(Average_change)
 print(f'Average Change: {Average_change_format}')
 
+# for row in data:
+#     greatest_increase = ["", 0]
+#     greatest_decrease = ["", 9999999999999]
+#     if Changes > greatest_increase[1]:
+#         greatest_increase[0] = row[0]
+#         greatest_increase[1] = Changes
+# print(f"{greatest_increase[0]} {greatest_increase[1]}")
