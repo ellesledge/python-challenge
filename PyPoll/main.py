@@ -1,15 +1,19 @@
 import os
 import csv
 
-election_data = os.path.join("Resources", "election_data.csv")
-print('Election Results')
-print('---------------------------------------')
+file_to_load = os.path.join("Resources", "election_data.csv")
+file_to_output = os.path.join("Analysis", "election_data.csv")
 
-with open(election_data, 'r') as csv_file:
-    reader = csv.reader(csv_file, delimiter=',')
-    next(reader)
-    data = list(reader)
-    Votes = len()
-print(f'Total Votes: {sum(list)}')  
+total_votes = 0
+candidate_received = []
+candidate_votes = {}
+winning_candidate = ""
+winning_count = 0
 
-   
+with open (file_to_load) as election_data:
+    reader = csv.reader(election_data)
+    header = next(reader)
+
+    for row in reader:
+        
+
