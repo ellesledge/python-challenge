@@ -1,35 +1,58 @@
 import os
 import csv
 
-budget_data = os.path.join("Resources", "budget_data.csv")
-print('Financial Analysis')
-print('---------------------------------------')
+file_to_load = os.path.join("Resources", "budget_data.csv")
+file_to_output = os.path.join("analysis", "budget_analysis.txt")
 
-with open(budget_data, 'r') as csv_file:
-    reader = csv.reader(csv_file, delimiter=',')
-    next(reader)
-    data = list(reader)
-    months = len(data)
-    print(f'Total Months: {months}')
- 
-net = []
-for row in data:
-    net.append(int(row[1]))
-print(f'Total: ${sum(net)}')
+total_months = 0
+month_of_change = []
+net_change_list = []
+greatest_increase = ["", 0]
+greatest_decrease = ["", 999999999999999999999]
+total_net = 0
 
-Changes = 0
-for i in range(1,len(data)):
-    # print(int(data[i][1]))
-    dif = int(data[i][1]) - int(data[i-1][1])
-    Changes += dif
-Average_change = Changes/(len(data)-1)
-Average_change_format= "${:,.2f}".format(Average_change)
-print(f'Average Change: {Average_change_format}')
+with open(file_to_load) as financial_data:
+    reader = csv.reader(financial_data)
 
-# for row in data:
-#     greatest_increase = ["", 0]
-#     greatest_decrease = ["", 9999999999999]
-#     if Changes > greatest_increase[1]:
-#         greatest_increase[0] = row[0]
-#         greatest_increase[1] = Changes
-# print(f"{greatest_increase[0]} {greatest_increase[1]}")
+    header = next(reader)
+    first_row = next(reader)
+    total_months += 1
+    total_net += int(first_row[1])
+    prev_net = int(first_row[1])
+
+    for row in reader:
+        total_months += 1
+        total_net += int(row[1])
+        net_change = int(row[1]) - prev_net
+        prev_net = int(row[1])
+        net_change_list += [net_change]
+        month_of_change += [row[0]]
+
+        if net_change > greatest_increase[1]:
+            greatest_increase[0] = row[0]
+            greatest_increase[1] = net_change
+
+        if net_change < greatest_decrease[1]:
+            greatest_decrease[0] = row[0]
+            greatest_decrease[1] = net_change
+
+    net_monthly_avg = sum(net_change_list) / len(net_change_list)
+
+    output = (
+        f"Financial Analysis",
+        f"--------------------------",
+        f"Total Months: {total_months}",
+        f"Total: ${total_net}",
+        f"Average Change: ${net_monthly_avg:.2f}",
+        f"Greatest Increase in Profits: {greatest_increase[0]} (${greatest_increase[1]})",
+        f"Greatest Decrease in Profits: {greatest_decrease[0]} (${greatest_decrease[1]})"
+    )
+
+    print(output)
+
+with open(file_to_output, "w") as txt_file:
+    txt_file.write("output")
+
+
+
+    
